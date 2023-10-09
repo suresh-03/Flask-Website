@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(150))
+    notes = db.relationship("Note")
 
 
 class Note(db.Model):
