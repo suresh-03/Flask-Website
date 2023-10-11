@@ -32,11 +32,27 @@ def sign_up():
     return render_template("signup.html")
 
 
-@auth.route("/login")
+@auth.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            if check_password_hash(user.password, password):
+                flash("Welcome to the website!", category="success")
+                return redirect(url_for("views.home"))
+            else:
+                flash("Enter valid password!", category="error")
+        else:
+            flash("User not found! You have to create one!", category="error")
+
     return render_template("login.html")
 
 
-@auth.route("/logout")
+@auth.route("/logout",methods=["GET","POST"])
 def logout():
+    
     return render_template("login.html")
