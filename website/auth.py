@@ -27,11 +27,11 @@ def sign_up():
             )
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user)
+            login_user(new_user, remember=True)
             flash("Account created!", category="success")
             return redirect(url_for("views.home"))
 
-    return render_template("signup.html")
+    return render_template("signup.html", user=current_user)
 
 
 @auth.route("/login", methods=["GET", "POST"])
@@ -45,14 +45,14 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash("Welcome to the website!", category="success")
-                login_user(user)
+                login_user(user, remember=True)
                 return redirect(url_for("views.home"))
             else:
                 flash("Enter valid password!", category="error")
         else:
             flash("User not found! You have to create one!", category="error")
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 
 @auth.route("/logout", methods=["GET", "POST"])
